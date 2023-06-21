@@ -16,7 +16,7 @@ class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
 
     # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+    prompt = '(hbnb) '
 
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -29,11 +29,6 @@ class HBNBCommand(cmd.Cmd):
              'max_guest': int, 'price_by_night': int,
              'latitude': float, 'longitude': float
             }
-
-    def preloop(self):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb)')
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -61,11 +56,9 @@ class HBNBCommand(cmd.Cmd):
 
             # if parentheses contains arguments, parse them
             pline = pline[pline.find('(') + 1:pline.find(')')]
-            print("a: " + pline)
             if pline:
                 # split args using [<delimiter>]: (<id>, [<*args>])
                 pline = pline.split(', ')  # pline convert to array
-                print("b: {}".format(pline))
 
                 # isolating _id and stripping quotes
                 # when using <className>.create(<**kwargs>)
@@ -88,21 +81,12 @@ class HBNBCommand(cmd.Cmd):
                         _args = pline.replace(',', '')
                         # _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
-            print("c: " + line)
 
         except AttributeError:
             pass
-        # except IndexError:
-        #     print("IndexError: Segmentation Fault")
         finally:
             print("Finally: " + line)
             return line
-
-    def postcmd(self, stop, line):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
-        return stop
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
@@ -145,7 +129,6 @@ class HBNBCommand(cmd.Cmd):
         for attr in instance_attr:
             # separate, remove quotes then add to kwargs dict
             stripped = attr.split("=")
-            print(stripped)
             key = stripped[0]
             value = stripped[1].replace('"', '')
             if key in self.types:
@@ -155,7 +138,6 @@ class HBNBCommand(cmd.Cmd):
                 value = value.replace('_', ' ')
             kwargs[key] = value
 
-        print(kwargs)
         new_instance = self.classes[cls](**kwargs)
         storage.save()
         print(new_instance.id)
