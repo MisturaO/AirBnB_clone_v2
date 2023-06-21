@@ -8,19 +8,23 @@ class BaseModel:
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
         """Instantiates a new model"""
+        # This would instantiate an object without parameters
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             storage.new(self)
-        elif kwargs['__class__']:
+        # This would instantiate an object with parameters
+        # A fresh keyword-argument won't have the __class__ key
+        elif '__class__' not in kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
             self.__dict__.update(kwargs)
             storage.new(self)
+        # This is to reload an already saved object
         else:
             kwargs['updated_at'] = datetime.strptime(kwargs['updated_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')

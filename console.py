@@ -56,23 +56,31 @@ class HBNBCommand(cmd.Cmd):
             # isolate and validate <command>
             _cmd = pline[pline.find('.') + 1:pline.find('(')]
             if _cmd not in HBNBCommand.dot_cmds:
+                print("not here")
                 raise AttributeError
 
             # if parentheses contains arguments, parse them
             pline = pline[pline.find('(') + 1:pline.find(')')]
+            print("a: " + pline)
             if pline:
                 # split args using [<delimiter>]: (<id>, [<*args>])
                 pline = pline.split(', ')  # pline convert to array
+                print("b: {}".format(pline))
 
-                # isolate _id, stripping quotes
-                _id = pline[0].replace('"', '')
+                # isolating _id and stripping quotes
+                # when using <className>.create(<**kwargs>)
+                # _id would store the first parameter instead of an
+                # actual id. It is not ideal, but it still works,
+                # which is why the preferred method is
+                # create <className> <**kwargs>
+                _id = pline.pop(0)
+                _id = _id.replace('"', '')
                 # possible bug here: ???
                 # empty quotes register as empty _id when replaced ???
 
-                # if arguments exist beyond _id
-                pline = pline[1].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
+                    pline = pline[0].strip()    # pline is now str
                     if pline[0] == '{' and pline[-1] == '}' \
                             and type(eval(pline)) is dict:
                         _args = pline
@@ -80,10 +88,14 @@ class HBNBCommand(cmd.Cmd):
                         _args = pline.replace(',', '')
                         # _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
+            print("c: " + line)
 
         except AttributeError:
             pass
+        # except IndexError:
+        #     print("IndexError: Segmentation Fault")
         finally:
+            print("Finally: " + line)
             return line
 
     def postcmd(self, stop, line):
@@ -131,17 +143,22 @@ class HBNBCommand(cmd.Cmd):
             return
 
         for attr in instance_attr:
-            # remove quotes then add to kwargs dict
-            stripped = attr.strip("'")
-            stripped = stripped.split("=")
-            key = stripped[0].strip("'")
+            # separate, remove quotes then add to kwargs dict
+            stripped = attr.split("=")
+            print(stripped)
+            key = stripped[0]
             value = stripped[1].replace('"', '')
+            if key in self.types:
+                type_func = self.types[key]
+                value = type_func(value)
+            elif value.find('_'):
+                value = value.replace('_', ' ')
             kwargs[key] = value
+
         print(kwargs)
         new_instance = self.classes[cls](**kwargs)
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
