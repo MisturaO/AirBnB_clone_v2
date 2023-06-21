@@ -43,7 +43,7 @@ class HBNBCommand(cmd.Cmd):
         """
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
-        # scan for general formating - i.e '.', '(', ')'
+        # scan for general formatting - i.e '.', '(', ')'
         if not ('.' in line and '(' in line and ')' in line):
             return line
 
@@ -58,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
             if _cmd not in HBNBCommand.dot_cmds:
                 raise Exception
 
-            # if parantheses contain arguments, parse them
+            # if parentheses contains arguments, parse them
             pline = pline[pline.find('(') + 1:pline.find(')')]
             if pline:
                 # partition args: (<id>, [<delim>], [<*args>])
@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] is '{' and pline[-1] is '}' \
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -319,6 +319,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
