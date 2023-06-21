@@ -23,7 +23,7 @@ class HBNBCommand(cmd.Cmd):
                'State': State, 'City': City, 'Amenity': Amenity,
                'Review': Review
               }
-    dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
+    dot_cmds = ['all', 'count', 'show', 'destroy', 'update', 'create']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
              'max_guest': int, 'price_by_night': int,
@@ -48,7 +48,7 @@ class HBNBCommand(cmd.Cmd):
             return line
 
         try:  # parse line left to right
-            pline = line[:]  # parsed line
+            pline = line[:]  # parsed line ???
 
             # isolate <class name>
             _cls = pline[:pline.find('.')]
@@ -56,21 +56,21 @@ class HBNBCommand(cmd.Cmd):
             # isolate and validate <command>
             _cmd = pline[pline.find('.') + 1:pline.find('(')]
             if _cmd not in HBNBCommand.dot_cmds:
-                raise Exception
+                raise AttributeError
 
             # if parentheses contains arguments, parse them
             pline = pline[pline.find('(') + 1:pline.find(')')]
             if pline:
-                # partition args: (<id>, [<delim>], [<*args>])
-                pline = pline.partition(', ')  # pline convert to tuple
+                # partition args: (<id>, [<delimiter>], [<*args>])
+                pline = pline.split(', ')  # pline convert to tuple
 
                 # isolate _id, stripping quotes
-                _id = pline[0].replace('\"', '')
+                _id = pline[0].replace('"', '')
                 # possible bug here:
                 # empty quotes register as empty _id when replaced
 
                 # if arguments exist beyond _id
-                pline = pline[2].strip()  # pline is now str
+                pline = pline[1].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
                     if pline[0] == '{' and pline[-1] == '}' \
@@ -81,7 +81,7 @@ class HBNBCommand(cmd.Cmd):
                         # _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
 
-        except Exception as mess:
+        except AttributeError:
             pass
         finally:
             return line
@@ -133,13 +133,13 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, args):
         """ Method to show an individual object """
-        new = args.partition(" ")
-        c_name = new[0]
-        c_id = new[2]
+        c_name, c_id = args.split(" ")
+        all_objs = storage.all()
 
         # guard against trailing args
         if c_id and ' ' in c_id:
-            c_id = c_id.partition(' ')[0]
+            print(c_id.find(' '))
+            c_id = c_id.strip()
 
         if not c_name:
             print("** class name missing **")
@@ -155,7 +155,7 @@ class HBNBCommand(cmd.Cmd):
 
         key = c_name + "." + c_id
         try:
-            print(storage._FileStorage__objects[key])
+            print(all_objs[key])
         except KeyError:
             print("** no instance found **")
 
@@ -203,7 +203,7 @@ class HBNBCommand(cmd.Cmd):
         all_objs = storage.all()
 
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            args = args.strip()  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
@@ -223,8 +223,9 @@ class HBNBCommand(cmd.Cmd):
 
     def do_count(self, args):
         """Count current number of class instances"""
+        all_objs = storage.all()
         count = 0
-        for k, v in storage._FileStorage__objects.items():
+        for k, v in all_objs.items():
             if args == k.split('.')[0]:
                 count += 1
         print(count)
@@ -237,7 +238,7 @@ class HBNBCommand(cmd.Cmd):
         """ Updates a certain object with new info """
         c_name = c_id = att_name = att_val = kwargs = ''
 
-        # isolate cls from id/args, ex: (<cls>, delim, <id/args>)
+        # isolate cls from id/args, ex: (<cls>, delimiter, <id/args>)
         args = args.partition(" ")
         if args[0]:
             c_name = args[0]
@@ -273,8 +274,8 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] == '\"':  # check for quoted arg
-                second_quote = args.find('\"', 1)
+            if args and args[0] == '"':  # check for quoted arg
+                second_quote = args.find('"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
 
@@ -284,8 +285,8 @@ class HBNBCommand(cmd.Cmd):
             if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] == '\"':
-                att_val = args[2][1:args[2].find('\"', 1)]
+            if args[2] and args[2][0] == '"':
+                att_val = args[2][1:args[2].find('"', 1)]
 
             # if att_val was not quoted arg
             if not att_val and args[2]:
@@ -299,7 +300,7 @@ class HBNBCommand(cmd.Cmd):
         # iterate through attr names and values
         for i, att_name in enumerate(args):
             # block only runs on even iterations
-            if (i % 2 == 0):
+            if i % 2 == 0:
                 att_val = args[i + 1]  # following item is value
                 if not att_name:  # check for att_name
                     print("** attribute name missing **")
