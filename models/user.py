@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
-    """This class defines the table 'users' by various
+    """This class defines the table 'users' by variouss
     attributes(columns) for the database storage"""
     __tablename__ = 'users'
     email = Column(String(128), nullable=False)
