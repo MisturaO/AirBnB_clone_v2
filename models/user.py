@@ -4,6 +4,8 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Integer, Column, String
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+from models.place import Place
 
 
 class User(BaseModel, Base):
@@ -15,6 +17,7 @@ class User(BaseModel, Base):
     first_name = Column(String(128), nullable=False)
     last_name = Column(String(128), nullable=False)
 
-    """Relationship is created with the place table(i.e. the Place class model)"""
+    """Relationship is created with the place table(i.e. the
+    Place class model)"""
     places = relationship("Place", cascade='all, delete, delete-orphan',
                           backref="user")
