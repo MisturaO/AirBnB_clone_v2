@@ -7,7 +7,7 @@ from sqlalchemy.orm import relationship
 
 
 class User(BaseModel, Base):
-    """This class defines the table 'users' by variouss
+    """This class defines the table 'users' by various
     attributes(columns) for the database storage"""
     __tablename__ = 'users'
     email = Column(String(128), nullable=False)
@@ -15,7 +15,7 @@ class User(BaseModel, Base):
     first_name = Column(String(128), nullable=False)
     last_name = Column(String(128), nullable=False)
 
-    """Relationship is created with the place 
+    """Relationship is created with the place
     table(i.e. the Place class model)"""
     places = relationship("Place", cascade='all, delete-orphan',
                           backref="user")
