@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 class Place(BaseModel, Base):
     """This class defines the table 'places' by various
-    attributes(columns) for the database storage"""
+    attributes(columns) forr the database storage"""
     __tablename__ = 'places'
     city_id = Column(String(60), nullable=False, ForeignKey("cities.id"))
     user_id = Column(String(60), nullable=False, ForeignKey("users.id"))

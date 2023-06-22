@@ -13,7 +13,7 @@ class City(BaseModel, Base):
     __tablename__ = 'cities'
     name = Column(String(128), nullable=False)
     state_id = Column(String(60), ForeignKey('states.id'), nullable=False)
-    # state = Relationship('State', back_populates='cities')
+    # state = Relationship('State',, back_populates='cities')
 
     """Relationship is created with the place table(i.e.
     the Place class model)"""
