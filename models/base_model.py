@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """This module defines a base class for all models in our hbnb clone"""
 import uuid
-from models import storage
+import models
 from datetime import datetime
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, String, DateTime
@@ -11,16 +11,17 @@ Base = declarative_base()
 
 class BaseModel:
     """A base class for all hbnb models"""
+    id = Column(String(60), unique=True, nullable=False, primary_key=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
+
     def __init__(self, *args, **kwargs):
         """Instantiates a new model"""
         # This would instantiate an object without parameters
         if not kwargs or '__class__' not in kwargs:
-            self.id = Column(String(60), unique=True,
-                             nullable=False, primary_key=True)
-            self.created_at = Column(DateTime, nullable=False,
-                                     default=datetime.utcnow())
-            self.updated_at = Column(DateTime, nullable=False,
-                                     default=datetime.utcnow())
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
             # This would instantiate an object with parameters
             # A fresh keyword-argument won't have the __class__ key
             if '__class__' not in kwargs:
@@ -42,8 +43,8 @@ class BaseModel:
     def save(self):
         """Updates updated_at with current time when instance is changed"""
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
 
     def to_dict(self):
         """Convert instance into dict format"""
@@ -61,4 +62,4 @@ class BaseModel:
         """delete the current instance from the storage (models.storage)
         by calling the method delete
         """
-        storage.delete(self)
+        models.storage.delete(self)

@@ -2,7 +2,7 @@
 """This module defines a class User:
     Updated to DBStorage from file storage"""
 from models.base_model import BaseModel, Base
-from sqlalchemy import Integer, Column, String
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
 
