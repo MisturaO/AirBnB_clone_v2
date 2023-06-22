@@ -43,7 +43,6 @@ class DBStorage:
             cls_objs = self.__session.query(classes[cls_f])
             for objs in cls_objs:
                 key = f'{cls_f}.{objs.id}'
-                print(key)
                 all_objs[key] = objs
         if cls:
             if isinstance(cls, str):
