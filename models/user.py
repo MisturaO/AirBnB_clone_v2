@@ -17,5 +17,5 @@ class User(BaseModel, Base):
 
     """Relationship is created with the place 
     table(i.e. the Place class model)"""
-    places = relationship("Place", cascade='all, delete, delete-orphan',
+    places = relationship("Place", cascade='all, delete-orphan',
                           backref="user")
