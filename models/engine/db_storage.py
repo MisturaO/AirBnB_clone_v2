@@ -34,18 +34,25 @@ class DBStorage:
     def all(self, cls=None):
         """return all object from database depending on cls (optional)"""
         all_objs = {}
-        classes = ['User', 'City', 'Place', 'State', 'Review', 'Amenity']
+        classes = {
+            'User': User, 'Place': Place,
+            'State': State, 'City': City,
+        }
 
         def get_all(cls_f):
-            cls_objs = self.__session.query(cls_f).all()
+            cls_objs = self.__session.query(classes[cls_f])
             for objs in cls_objs:
-                key = f'{cls}.{objs.id}'
+                key = f'{cls_f}.{objs.id}'
+                print(key)
                 all_objs[key] = objs
         if cls:
-            get_all(cls)
+            if isinstance(cls, str):
+                get_all(cls)
         else:
-            for cls_i in classes:
-                get_all(cls_i)
+            for cls_str, cls_type in classes.items():
+                get_all(cls_str)
+
+        return all_objs
 
     def new(self, obj):
         """add new object to the current session"""
