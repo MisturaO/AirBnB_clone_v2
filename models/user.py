@@ -1,16 +1,13 @@
 #!/usr/bin/python3
 """This module defines a class User:
     Updated to DBStorage from file storage"""
-from sqlalchemy.ext.declarative import declarative_base
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from models.place import Place
-from models.review import Review
 
 
 class User(BaseModel, Base):
-    """This class defines the table 'users' by variouss
+    """This class defines the table 'users' by various
     attributes(columns) for the database storage"""
     __tablename__ = "users"
     email = Column(String(128), nullable=False)

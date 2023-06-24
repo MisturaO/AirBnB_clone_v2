@@ -60,11 +60,13 @@ class Place(BaseModel, Base):
             # through to check if the id is in amenity_ids
             for value in models.storage.all(Amenity).values():
                 if value.id in self.amenity_ids:
-                    amenities_in_place.append(value.place_id)
+                    amenities_in_place.append(value)
             return amenities_in_place
 
         @amenities.setter
         def amenities(self, amenity_id):
             """Setter that handles append method for adding an Amenity.id
             to the attribute amenity_ids"""
-            self.amenity_ids.append(amenity_id)
+            from models.amenity import Amenity
+            if type(amenity_id) == Amenity:
+                self.amenity_ids.append(amenity_id)

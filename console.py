@@ -201,7 +201,7 @@ class HBNBCommand(cmd.Cmd):
         key = c_name + "." + c_id
 
         try:
-            storage.delete(storage.all()[key])
+            del(storage.all()[key])
             storage.save()
         except KeyError:
             print("** no instance found **")
@@ -214,19 +214,18 @@ class HBNBCommand(cmd.Cmd):
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
         print_list = []
-        all_objs = {}
+        all_objs = storage.all()
 
         if args:
             args = args.strip()  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            all_objs.update(storage.all(args))
-            for v in all_objs.values():
-                print_list.append(str(v))
+            for k, v in all_objs.items():
+                if k.split('.')[0] == args:
+                    print_list.append(str(v))
         else:
-            all_objs.update(storage.all())
-            for v in all_objs.values():
+            for k, v in all_objs.items():
                 print_list.append(str(v))
 
         print(print_list)
