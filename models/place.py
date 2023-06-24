@@ -57,6 +57,7 @@ class Place(BaseModel, Base):
         for value in models.storage.all(Amenity).values():
             if value.id in self.amenity_ids:
                 amenities_in_place.append(value.place_id)
+        return amenities_in_place
 
     @amenities.setter
     def amenities(self, amenity_id):
