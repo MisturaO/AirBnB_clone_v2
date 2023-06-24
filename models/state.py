@@ -16,9 +16,10 @@ class State(BaseModel, Base):
 
     @property
     def cities(self):
-        cities = {}
-        all_objs = models.storage.all(city.City)
-        for key, value in all_objs.items():
+        cities = []
+        # getting a list of values from the all() dictionary
+        all_objs = models.storage.all(city.City).values()
+        for value in all_objs:
             if value.state_id == self.id:
-                cities[key] = value
+                cities.append(value)
         return cities

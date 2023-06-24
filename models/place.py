@@ -1,10 +1,20 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, ForeignKey, Float, Integer
+from sqlalchemy import Column, String, ForeignKey, Float, Integer, Table
 from sqlalchemy.orm import relationship
 from models.review import Review
+from models.amenity import Amenity
 import models
+
+place_amenity = Table(
+    'place_amenity',
+    Base.metadata,
+    Column('place_id', String(60), ForeignKey('places.id'),
+           primary_key=True, nullable=False),
+    Column('amenity_id', String(60), ForeignKey('amenities.id'),
+           primary_key=True, nullable=False)
+)
 
 
 class Place(BaseModel, Base):
@@ -22,9 +32,10 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
-
     reviews = relationship("Review", cascade='all, delete-orphan',
                            backref="place")
+    amenities = relationship('Amenity', secondary=place_amenity,
+                             viewonly=False)
 
     @property
     def reviews(self):
@@ -34,3 +45,12 @@ class Place(BaseModel, Base):
             if value.place_id == self.id:
                 reviews_in_place.append(value)
         return reviews_in_place
+
+    @property
+    def amenities(self):
+        """Returns the list of Amenity instances based on the attribute
+        amenity_ids that contains all Amenity.id linked to the Place"""
+        amenities_in_place = []
+        for value in models.storage.all(Amenity):
+            if value.place_id == self.id:
+                amenities_in_place.append(value)
