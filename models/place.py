@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
+import os
+
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, ForeignKey, Float, Integer, Table
 from sqlalchemy.orm import relationship
@@ -31,36 +33,38 @@ class Place(BaseModel, Base):
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
-    reviews = relationship("Review", cascade='all, delete-orphan',
-                           backref="place")
-    amenities = relationship('Amenity', secondary=place_amenity,
-                             viewonly=False)
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
+        reviews = relationship("Review", cascade='all, delete-orphan',
+                               backref="place")
+        amenities = relationship('Amenity', secondary=place_amenity,
+                                 back_populates='place_amenities',
+                                 viewonly=False)
+    else:
+        @property
+        def reviews(self):
+            """Returns the reviews associated with Place"""
+            reviews_in_place = []
+            # getting a list of values from the all() dictionary and looping
+            for value in models.storage.all(Review).values():
+                if value.place_id == self.id:
+                    reviews_in_place.append(value)
+            return reviews_in_place
 
-    @property
-    def reviews(self):
-        """Returns the reviews associated with Place"""
-        reviews_in_place = []
-        # getting a list of values from the all() dictionary and looping
-        for value in models.storage.all(Review).values():
-            if value.place_id == self.id:
-                reviews_in_place.append(value)
-        return reviews_in_place
+        @property
+        def amenities(self):
+            """Returns the list of Amenity instances based on the attribute
+            amenity_ids that contains all Amenity.id linked to the Place"""
+            from models.amenity import Amenity
+            amenities_in_place = []
+            # getting a list of values from the all() dictionary and looping
+            # through to check if the id is in amenity_ids
+            for value in models.storage.all(Amenity).values():
+                if value.id in self.amenity_ids:
+                    amenities_in_place.append(value.place_id)
+            return amenities_in_place
 
-    @property
-    def amenities(self):
-        """Returns the list of Amenity instances based on the attribute
-        amenity_ids that contains all Amenity.id linked to the Place"""
-        from models.amenity import Amenity
-        amenities_in_place = []
-        # getting a list of values from the all() dictionary and looping
-        # through to check if the id is in amenity_ids
-        for value in models.storage.all(Amenity).values():
-            if value.id in self.amenity_ids:
-                amenities_in_place.append(value.place_id)
-        return amenities_in_place
-
-    @amenities.setter
-    def amenities(self, amenity_id):
-        """Setter that handles append method for adding an Amenity.id
-        to the attribute amenity_ids"""
-        self.amenity_ids.append(amenity_id)
+        @amenities.setter
+        def amenities(self, amenity_id):
+            """Setter that handles append method for adding an Amenity.id
+            to the attribute amenity_ids"""
+            self.amenity_ids.append(amenity_id)

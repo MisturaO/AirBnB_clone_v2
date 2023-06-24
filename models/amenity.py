@@ -10,4 +10,5 @@ class Amenity(BaseModel, Base):
     """Defines what each amenity would have"""
     __tablename__ = 'amenities'
     name = Column(String(128), nullable=False)
-    place_amenities = Relationship('Place', secondary=place_amenity)
+    place_amenities = Relationship('Place', secondary=place_amenity,
+                                   viewonly=False, back_populates='amenities')

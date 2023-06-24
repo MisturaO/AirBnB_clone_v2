@@ -37,7 +37,7 @@ class DBStorage:
         classes = {
             'User': User, 'Place': Place,
             'State': State, 'City': City,
-            'Review': Review
+            'Review': Review, 'Amenity': Amenity
         }
 
         def get_all(cls_f):
