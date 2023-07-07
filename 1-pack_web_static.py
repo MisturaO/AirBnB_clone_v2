@@ -12,6 +12,6 @@ def do_pack():
         parent_dir = os.getcwd()
         full_path = os.path.join(parent_dir, 'versions')
         os.makedirs(full_path)
-    cmd = 'tar -cvfz /versions/web_static_{}.tgz web_static'.format(date)
+    cmd = 'tar -cvzf /versions/web_static_{}.tgz web_static'.format(date)
     if local('{}'.format(cmd)).failed:
         return None
