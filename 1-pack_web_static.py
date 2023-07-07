@@ -13,7 +13,7 @@ def do_pack():
     if not os.path.isdir('versions'):
         os.makedirs(full_path)
     archived_file = 'web_static_{}.tgz'.format(date)
-    cmd = 'tar -cvzf /versions/{} web_static'.format(archived_file)
+    cmd = 'tar -cvzf versions/{} web_static'.format(archived_file)
     result = local('{}'.format(cmd))
     if result.return_code == 0:
         size = os.path.getsize(os.path.join(full_path, archived_file))
