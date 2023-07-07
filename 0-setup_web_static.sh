@@ -21,7 +21,7 @@ if [[ ! -d /data/web_static/releases/test  ]]; then
 elif [[ -d /data/web_static/current ]]; then
         ln -fs /data/web_static/releases/test /data/web_static/current
 fi
-chown -RL ubuntu:ubuntu /data
+chown -R ubuntu:ubuntu /data
 ADD='\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}'
 sed -i "/server_name _;/a $ADD" /etc/nginx/sites-available/default
 service nginx restart
