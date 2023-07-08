@@ -55,10 +55,10 @@ file {'/data/web_static/current':
     owner  => 'ubuntu',
     group  => 'ubuntu',
 }
-# $add = "\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}"
+$add = '\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}'
 exec{'location hbnb_static':
   provider => shell,
-  command  => "sudo sed -i '/server_name _;/a \\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t};' /etc/nginx/sites-available/default",
+  command  => "sudo sed -i \"/server_name _;/a \\n${add}\" /etc/nginx/sites-available/default",
   require  => Exec['install nginx'],
 }
 # restart nginx after config  update
