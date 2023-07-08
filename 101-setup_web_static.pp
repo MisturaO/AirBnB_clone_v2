@@ -51,7 +51,7 @@ file {'/data/web_static/releases/test/index.html':
 }
 file {'/data/web_static/current':
     enable => link,
-    target => '/data/web_static/releases/test'
+    target => '/data/web_static/releases/test',
     owner  => 'ubuntu',
     group  => 'ubuntu',
 }
