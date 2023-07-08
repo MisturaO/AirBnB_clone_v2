@@ -16,7 +16,8 @@ def do_pack():
     cmd = 'tar -cvzf versions/{} web_static'.format(archived_file)
     result = local('{}'.format(cmd))
     if result.return_code == 0:
-        size = os.path.getsize(os.path.join(full_path, archived_file))
+        location = os.path.join(full_path, archived_file)
+        size = os.path.getsize(location)
         print('web_static packed: versions/{} -> {}Bytes'.format(archived_file,
                                                                  size))
     else:
