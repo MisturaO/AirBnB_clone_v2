@@ -13,44 +13,44 @@ exec {'install nginx':
 }
 
 file {'/data':
-    enable => directory,
+    ensure => directory,
     owner  => 'ubuntu',
     group  => 'ubuntu',
 }
 
 file {'/data/web_static':
-    enable  => directory,
+    ensure  => directory,
     owner   => 'ubuntu',
     group   => 'ubuntu',
     require => File['/data'],
 }
 file {'/data/web_static/shared':
-    enable  => directory,
+    ensure  => directory,
     owner   => 'ubuntu',
     group   => 'ubuntu',
     require => File['/data/web_static'],
 }
 file {'/data/web_static/releases':
-    enable  => directory,
+    ensure  => directory,
     owner   => 'ubuntu',
     group   => 'ubuntu',
     require => File['/data/web_static'],
 }
 file {'/data/web_static/releases/test':
-    enable  => directory,
+    ensure  => directory,
     owner   => 'ubuntu',
     group   => 'ubuntu',
     require => File['/data/web_static/releases'],
 }
 file {'/data/web_static/releases/test/index.html':
-    enable  => file,
+    ensure  => file,
     owner   => 'ubuntu',
     group   => 'ubuntu',
     content => 'Hello Web Static',
     require => File['/data/web_static/releases/test'],
 }
 file {'/data/web_static/current':
-    enable => link,
+    ensure => link,
     target => '/data/web_static/releases/test',
     owner  => 'ubuntu',
     group  => 'ubuntu',
