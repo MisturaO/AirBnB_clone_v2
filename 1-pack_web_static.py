@@ -20,4 +20,4 @@ def do_pack():
         print('web_static packed: versions/{} -> {}Bytes'.format(archived_file,
                                                                  size))
     else:
-        print('None')
+        print(None)
