@@ -55,7 +55,7 @@ file {'/data/web_static/current':
     owner  => 'ubuntu',
     group  => 'ubuntu',
 }
-$add = '\n\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}'
+$add = '\n\n\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}'
 exec{'location hbnb_static':
   provider => shell,
   command  => "sudo sed -i \"s/server_name _;/server_name _;${add}/\" /etc/nginx/sites-available/default",
