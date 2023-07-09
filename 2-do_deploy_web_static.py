@@ -4,9 +4,27 @@
 from fabric.api import run
 import os.path
 from fabric.api import put
-from fabric.api import env
+from fabric.api import env, local, runs_once
+from datetime import datetime
 
 env.hosts = ["3.90.81.72", "3.85.148.246"]
+
+@runs_once
+def do_pack():
+    """Creates a tar gzipped file archive of directory web_static
+    to be transfered to the server as a compresssed file"""
+    file = "web_static_"
+    dt_time = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    file_name = file + dt_time + ".tgz"
+
+    if os.path.isdir("versions") is False:
+        if local('mkdir -p versions').failed is True:
+            return None
+    if local("tar -cvzf versions/{} web_static"
+             .format(file_name)).failed is True:
+        return None
+    local('chmod 664 versions/{}'.format(file_name))
+    return "versions/" + file_name
 
 
 def do_deploy(archive_path):
