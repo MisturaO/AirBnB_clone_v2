@@ -61,7 +61,7 @@ exec{'location hbnb_static':
   command  => "sudo sed -i \"s/server_name _;/server_name _;${add}/\" /etc/nginx/sites-available/default",
   require  => Exec['install nginx'],
 }
-# restart nginx after config  update
+# restart nginxx after config  update
 exec {'restart':
   provider => shell,
   command  => 'sudo service nginx restart',
