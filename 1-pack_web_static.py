@@ -8,7 +8,7 @@ from datetime import datetime
 
 def do_pack():
     """Creates a tar gzipped file archive of directory web_static
-    to be transfered to the server as a compressed file"""
+    to be transfered to the server as a compresssed file"""
     file = "web_static_"
     dt_time = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     file_name = file + dt_time + ".tgz"
