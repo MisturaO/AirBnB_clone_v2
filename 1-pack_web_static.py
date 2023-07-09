@@ -13,8 +13,9 @@ def do_pack():
     dt_time = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     file_name = file + dt_time + ".tgz"
 
+    if local('mkdir -p versions').failed is True:
+         return None
     if os.path.isdir("versions") is False:
-        if local('mkdir -p versions').failed is False:
             return None
     if local("tar -cvzf versions/{} web_static"
              .format(file_name)).failed is True:
