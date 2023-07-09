@@ -19,5 +19,4 @@ def do_pack():
     if local('tar -cvzf versions/{} web_static'
              .format(file_name)).failed is True:
         return None
-    else:
-        return "versions/" + file_name
+    return "versions/" + file_name
