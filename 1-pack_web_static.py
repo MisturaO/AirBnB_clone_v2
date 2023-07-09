@@ -10,7 +10,7 @@ def do_pack():
     """Creates a tar gzipped file archive of directory web_static
     to be transfered to the server as a compressed file"""
     file = 'web_static_'
-    dt_time = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+    dt_time = datetime.utcnow().strftime('%Y%m%D%H%M%S')
     file_name = file + dt_time + '.tgz'
 
     if os.path.isdir('versions') is False:
