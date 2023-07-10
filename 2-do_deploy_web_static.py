@@ -7,7 +7,7 @@ from fabric.api import put
 from fabric.api import env, local, runs_once
 from datetime import datetime
 
-env.hosts = ["3.90.81.72", "3.85.148.246"]
+
 
 @runs_once
 def do_pack():
@@ -58,7 +58,7 @@ def do_deploy(archive_path):
         return False
     if run("rm /tmp/{}".format(file)).failed is True:
         return False
-    if run("mv {}/{}/web_static/*{}{}/".format(path, name, path, name)).failed is True:
+    if run("mv {}/{}/web_static/*" "{}{}/".format(path, name, path, name)).failed is True:
         return False
     if run("rm -rf {}{}/web_static".format(path, name)).failed is True:
         return False
