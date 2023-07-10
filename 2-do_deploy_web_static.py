@@ -50,5 +50,5 @@ def do_deploy(archive_path):
         name without extension>)"""
         run('ln -s /data/web_static/releases/{} /data/web_static/current'.format(name))
         return True
-    except:
+    except Exception: 
         return False
