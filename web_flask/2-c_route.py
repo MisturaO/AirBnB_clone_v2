@@ -16,7 +16,7 @@ Route 3:
     variable (replace underscore _ symbols with a space )
 """
 
-from flask import Flask, url_for
+from flask import Flask
 
 app = Flask(__name__)
 
@@ -32,20 +32,11 @@ def dispaly_hbnb():
     """Dispalys 'HBNB!'"""
     return 'HBNB'
 
- 
-def remove_url_underscore(text):
-    """
-    Helper function for route '/c/<text>' that will replace
-    underscores(_) in the url param with spaces
-    """
-    return text.replace("_", " ")
-
 
 @app.route('/c/<text>', strict_slashes=False)
 def display_C_var_value(text):
-    """Dispays 'C' followed by URL parameters(<text>) value"""
-    formatted_url_output = remove_url_underscore(text)
-    return f'C {formatted_url_output}'
+    """Dispays 'C' followed by the value of <text> param"""
+    return 'C {}'.format(text.replace('_', ' '))
 
 
 if __name__ == "__main__":
