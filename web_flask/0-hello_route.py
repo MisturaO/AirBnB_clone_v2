@@ -5,7 +5,7 @@ A script that starts a Flask web application:
 Routes:
     '/'
 Dispalys:
-    'Hello HBNB!'
+    'Hello HBNB!''
 """
 
 from flask import Flask
