@@ -53,7 +53,7 @@ def display_C_var_value(text):
 def display_python(text="is cool"):
     """
     Displays “Python ”, followed by the value of the <text> param, in
-    the url, or displays “Python ” followed by the default value of text
+    the url, or displays “Python ” followed by the default value of <text>
     """
     return 'Python {}'.format(text.replace('_', ' '))
 
