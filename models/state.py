@@ -5,7 +5,8 @@ import models
 import models.city as city
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
-from sqlalchemy.orm import Relationship
+from sqlalchemy.orm import relationship
+from models.engine.file_storage import FileStorage
 
 
 class State(BaseModel, Base):
@@ -13,14 +14,14 @@ class State(BaseModel, Base):
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
     if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        cities = Relationship('City', backref='state',
+        cities = relationship('City', backref='state',
                               cascade='all, delete-orphan')
     else:
         @property
         def cities(self):
             cities = []
             # getting a list of values from the all() dictionary
-            all_objs = models.storage.all(city.City).values()
+            all_objs = FileStorage().all(city.City).values()
             for value in all_objs:
                 if value.state_id == self.id:
                     cities.append(value)
